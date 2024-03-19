@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/4.2/ref/contrib/humanize -->
+{% block content %}
+<p>Updated: {{ task.updated_at|naturaltime }}</p>
+<h2>{{ task.name }}</h2>
+<p>{{ task.description }}</p>
+<a href="{% url 'home:task_update' task.id %}">Update</a>
+<a href="{% url 'home:task_delete' task.id %}">Delete</a>
+<p><a href="{% url 'home:all' %}">Back to all tasks</a></p>
+{% endblock %}

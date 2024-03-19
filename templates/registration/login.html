@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2 class="text-center m-3">Login to Task Manager</h2>
+    <div class="card border-secondary centered p-3 mx-auto m-4 bg-light" style="max-width: 20rem;">
+
+        {% if form.errors %}
+            <p class="text-danger">Your username and password didn't match. Please try again.</p>
+        {% endif %}
+
+    <form class="for" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ username }}" required>
+        </div>
+        {% if form.errors %}
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control is-invalid" id="password" name="password" required>
+                <div id="password" class="invalid-feedback">
+                    Invalid password.
+                  </div>
+            </div>
+        {% else %}
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+        {% endif %}
+        
+        <button type="submit" class="btn btn-primary">Login</button>
+
+        <input type="hidden" name="next" value="{% url 'home:all' %}" />
+    </form>
+    </div>
+{% endblock %}
