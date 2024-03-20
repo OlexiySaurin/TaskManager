@@ -1,0 +1,14 @@
+{% load humanize %}
+{% load static %}
+
+<div class="card-header">
+  <small class="text-muted">Last updated: {{ task.updated_at|naturaltime }}</small>
+</div>
+<div class="card-body">
+  <div class="card-title">
+      <h4>{{ task.name }}</h4>
+  </div>
+  <div class="card-text text-muted">{{ task.description }}</div> <br>
+  <a class="card-link text-muted" href="{% url 'home:task_update' task.id %}">Edit</a>
+  <a class="card-link text-muted" href="{% url 'home:task_delete' task.id %}">Delete</a>
+</div>

@@ -7,28 +7,37 @@
 {% if task_list %}
   {% for task in task_list %}
       <div class="card text-dark bg-light mb-3" style="max-width: 30rem;">
-          <div class="card-header">
-              <small class="text-muted">Last updated: {{ task.updated_at|naturaltime }}</small>
-          </div>
-          <div class="card-body">
-              <div class="card-title">
-                  <h4>{{ task.name }}</h4>
-              </div>
-              <div class="card-text text-muted">{{ task.description }}</div> <br>
-              <a class="card-link text-muted" href="{% url 'home:task_update' task.id %}">Edit</a>
-              <a class="card-link text-muted" href="{% url 'home:task_delete' task.id %}">Delete</a>
-          </div>
+          {% include 'home/task.html' %}
       </div>
   {% endfor %}
 {% else %}
   <h5>You have no tasks. Create new task.</h5>
 {% endif %}
-<p>
-<a class="btn btn-secondary" href="{% url 'home:task_create' %}">Create new Task</a>
+<div class="card mt-4 bg-light border-secondary" style="max-width: 30rem;">
+<div class="card-body">
+    <form action="{% url 'home:task_create' %}" method="post">
+    {% csrf_token %}
+        
+      <div class="card-title">
+          <label class="form-label text-muted" for="creating_name">Name</label>
+          <input class="form-control" type="text" id="creating_name" name="name" required/>
+      </div>
+      <div class="card-text text-muted mb-2">
+          <label class="form-label text-muted" for="creating_description">Description</label>
+          <input class="form-control" type="text" id="creating_description" name="description"/>
+      </div>
+
+    <input class="btn btn-primary" type="submit" value="Create new task">
+    <input class="btn btn-secondary m-2" type="submit" value="Cancel" onclick="window.location.href='{% url 'home:all' %}';return false;">
+
+</form>
+    </div>
+</div>
+
 <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
-    <button class="btn btn-danger" type="submit">Logout</button>
+    <button class="btn btn-danger mt-3" type="submit">Logout</button>
     <input type="hidden" name="next" value="{% url "login" %}" />
 </form>
-</p>
+
 {% endblock %}

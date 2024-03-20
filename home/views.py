@@ -1,10 +1,17 @@
+from .forms import TaskForm
 from .models import Task
-from .owner import OwnerListView, OwnerCreateView, OwnerDetailView, OwnerUpdateView, OwnerDeleteView
+from .owner import OwnerListView, OwnerDetailView, OwnerUpdateView, OwnerDeleteView, OwnerCreateView
 
 
 class TaskListView(OwnerListView):
     model = Task
     # template is home/task_list.html
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = TaskForm()
+        context['create_form'] = form
+        return context
 
 
 class TaskDetailView(OwnerDetailView):
@@ -14,14 +21,27 @@ class TaskDetailView(OwnerDetailView):
 
 class TaskCreateView(OwnerCreateView):
     model = Task
-    # List the fields to copy from the Article model to the Article form
+    template_name = 'home/task_list.html'
     fields = ['name', 'description']
-    # template is home/task_form.html
+
+    # """Overriding get_context_data to change name of creating form to create_form"""
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['create_form'] = context['form']
+    #     del context['form']
+    #     return context
 
 
 class TaskUpdateView(OwnerUpdateView):
     model = Task
-    fields = ['name', 'description']
+    template_name = 'home/task_list.html'
+
+    """Overriding get_context_data to change name of updating form to update_form"""
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update_form'] = context['form']
+        del context['form']
+        return context
 
 
 class TaskDeleteView(OwnerDeleteView):

@@ -1,3 +1,4 @@
+{% load humanize %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -10,7 +11,7 @@
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-<div class="container">
+<div class="container d-grid justify-content-md-center">
     {% block content %}
     {% endblock %}
 </div>
