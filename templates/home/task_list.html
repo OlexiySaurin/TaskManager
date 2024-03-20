@@ -3,12 +3,45 @@
 {% load static %}
 
 {% block content %}
-<h1 class="m-4">{{ user.username }}'s tasks</h1>
+<div class="row align-items-center justify-content-center mb-3">
+    <div class="col-auto"><h1 class="m-4">{{ user.username }}'s tasks</h1></div>
+    <form class="col-auto" action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger m-3" type="submit">Logout</button>
+        <input type="hidden" name="next" value="{% url "login" %}" />
+    </form>
+</div>
+
 {% if task_list %}
   {% for task in task_list %}
-      <div class="card text-dark bg-light mb-3" style="max-width: 30rem;">
-          {% include 'home/task.html' %}
-      </div>
+      {% if task.id != object.id %}
+          <div class="card text-dark bg-light mb-3" style="max-width: 30rem;">
+              {% include 'home/task.html' %}
+          </div>
+      {% else %}
+          <div class="card mb-3 bg-light border-primary" style="max-width: 30rem;">
+          <div class="card-header">
+              <small class="text-muted">Last updated: {{ task.updated_at|naturaltime }}</small>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'home:task_update' task.id %}" method="post">
+                {% csrf_token %}
+                    
+                  <div class="card-title">
+                      <input class="form-control" type="text" id="creating_name" name="name" value="{{ task.name }}" required/>
+                  </div>
+                  <div class="card-text text-muted mb-2">
+                      <textarea class="form-control form-control-sm" type="text" id="creating_description" name="description">{{ task.description }}</textarea>
+                  </div>
+            
+                <input class="btn btn-primary" type="submit" value="Edit task">
+                <input class="btn btn-secondary m-2" type="submit" value="Cancel" onclick="window.location.href='{% url 'home:all' %}';return false;">
+            
+            </form>
+                </div>
+            </div>
+      {% endif %}
+      
   {% endfor %}
 {% else %}
   <h5>You have no tasks. Create new task.</h5>
@@ -17,14 +50,14 @@
 <div class="card-body">
     <form action="{% url 'home:task_create' %}" method="post">
     {% csrf_token %}
-        
+
       <div class="card-title">
-          <label class="form-label text-muted" for="creating_name">Name</label>
-          <input class="form-control" type="text" id="creating_name" name="name" required/>
+          <label class="form-label text-muted" for="creating_name"><small>Name</small></label>
+          <input class="form-control form-control" type="text" id="creating_name" name="name" required/>
       </div>
       <div class="card-text text-muted mb-2">
-          <label class="form-label text-muted" for="creating_description">Description</label>
-          <input class="form-control" type="text" id="creating_description" name="description"/>
+          <label class="form-label text-muted" for="creating_description"><small>Description</small></label>
+          <textarea class="form-control form-control-sm" type="text" id="creating_description" name="description"></textarea>
       </div>
 
     <input class="btn btn-primary" type="submit" value="Create new task">
@@ -34,10 +67,6 @@
     </div>
 </div>
 
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button class="btn btn-danger mt-3" type="submit">Logout</button>
-    <input type="hidden" name="next" value="{% url "login" %}" />
-</form>
+
 
 {% endblock %}

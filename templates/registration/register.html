@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    <h2 class="text-center m-3">Create Account</h2>
+    <div class="card border-secondary centered p-3 mx-auto m-4 bg-light" style="max-width: 20rem;">
+
+    <form class="text-center" method="post" action="">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> Please correct the errors below.
+        </div>
+    {% endif %}
+        
+        <div class="mb-3">
+          <label for="name">Username</label>
+            {% if form.username.errors %}
+            <div class="text-danger mb-1">
+                {% for error in form.username.errors %}
+                    <small>{{ error }}</small><br>
+                {% endfor %}
+            </div>
+                <input type="text" class="form-control is-invalid" id="name" name="username" required>
+                {% else %}
+                <input type="text" class="form-control" id="name" name="username" value="{{ username }}" required>
+        {% endif %}
+          
+        </div>
+        <div class="mb-3">
+          <label for="email">Email address</label>
+            {% if form.email.errors %}
+            <div class="text-danger mb-1">
+                {% for error in form.email.errors %}
+                    <small class="bg-danger">{{ error }}</small><br>
+                {% endfor %}
+            </div>
+          <input type="email" class="form-control is-invalid" id="email" name="email" required> 
+                
+                {% else %}
+          <input type="email" class="form-control" id="email" name="email" value="{{ email }}" required> 
+                
+        {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="password1">Password</label>
+            {% if form.password1.errors %}
+            <div class="text-danger mb-1">
+                {% for error in form.password1.errors %}
+                    <small>{{ error }}</small><br>
+                {% endfor %}
+            </div>
+          <input type="password" class="form-control is-invalid" id="password1" name="password1" required>
+                
+                {% else %}
+          <input type="password" class="form-control" id="password1" name="password1" value="{{ password1 }}" required>
+                
+        {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="password2">Confirm password</label>
+            {% if form.password2.errors %}
+            <div class="text-danger mb-1">
+                {% for error in form.password2.errors %}
+                    <small>{{ error }}</small><br>
+                {% endfor %}
+            </div>
+          <input type="password" class="form-control is-invalid" id="password2" name="password2" required>
+                
+                {% else %}
+          <input type="password" class="form-control" id="password2" name="password2" value="{{ password2 }}" required>
+                
+        {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+
+        <input type="hidden" name="next" value="{% url 'login' %}" />
+    </form>
+    <footer class="mt-2 text-muted text-center"><small>Already have an account? <a href="{% url 'login' %}">Login</a></small></footer>
+    </div>
+{% endblock %}
