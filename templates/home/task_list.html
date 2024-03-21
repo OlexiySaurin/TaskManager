@@ -3,23 +3,49 @@
 {% load static %}
 
 {% block content %}
-<div class="row align-items-center justify-content-center mb-3">
-    <div class="col-auto"><h1 class="m-4">{{ user.username }}'s tasks</h1></div>
-    <form class="col-auto" action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button class="btn btn-danger m-3" type="submit">Logout</button>
-        <input type="hidden" name="next" value="{% url "login" %}" />
-    </form>
-</div>
+{#<div class="row align-items-center justify-content-center mb-3">#}
+{#    <div class="col-auto"><h1 class="m-4">{{ user.username }}'s tasks</h1></div>#}
+{#    <form class="col-auto" action="{% url 'logout' %}" method="post">#}
+{#        {% csrf_token %}#}
+{#        <button class="btn btn-danger m-3" type="submit">Logout</button>#}
+{#        <input type="hidden" name="next" value="{% url "login" %}" />#}
+{#    </form>#}
+{#</div>#}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light m-2">
+        <div class="container-fluid">
+            
+            <div class="navbar-brand">{{ user.username }}'s tasks</div>
+    
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+            <i class="bi bi-person"></i>
+        </button>
+        <div class="dropdown-menu  dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+{#            <p class="dropdown-item-text">@{{ user.username }}</p>#}
+            <hr class="dropdown-divider">
+            <form action="{% url 'logout' %}" method="post" class="dropdown-item-text">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+                <input type="hidden" name="next" value="{% url "login" %}" />
+            </form>
+        </div>
+            
+    </div>
+    </div>
 
-{% if task_list %}
-  {% for task in task_list %}
+        
+    </nav>
+    
+
+    
+{% if page_obj %}
+  {% for task in page_obj %}
       {% if task.id != object.id %}
-          <div class="card text-dark bg-light mb-3" style="max-width: 30rem;">
+          <div class="card text-dark m-3" style="max-width: 30rem;">
               {% include 'home/task.html' %}
           </div>
       {% else %}
-          <div class="card mb-3 bg-light border-primary" style="max-width: 30rem;">
+          <div class="card m-3 border-primary" style="max-width: 30rem;">
           <div class="card-header">
               <small class="text-muted">Last updated: {{ task.updated_at|naturaltime }}</small>
             </div>
@@ -43,15 +69,60 @@
       {% endif %}
       
   {% endfor %}
+{#    Pagination#}
+    {% if page_obj.has_other_pages %}
+        <nav>
+        <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        {% endif %}
+    </ul>
+        </nav>
+    
+    {% endif %}
 {% else %}
   <h5>You have no tasks. Create new task.</h5>
 {% endif %}
-<div class="card mt-4 bg-light border-secondary" style="max-width: 30rem;">
+<div class="card border-dark text-black m-3 bg-light" style="max-width: 30rem;">
 <div class="card-body">
     <form action="{% url 'home:task_create' %}" method="post">
     {% csrf_token %}
 
-      <div class="card-title">
+      <div class="card-text">
           <label class="form-label text-muted" for="creating_name"><small>Name</small></label>
           <input class="form-control form-control" type="text" id="creating_name" name="name" required/>
       </div>
@@ -59,9 +130,10 @@
           <label class="form-label text-muted" for="creating_description"><small>Description</small></label>
           <textarea class="form-control form-control-sm" type="text" id="creating_description" name="description"></textarea>
       </div>
-
     <input class="btn btn-primary" type="submit" value="Create new task">
     <input class="btn btn-secondary m-2" type="submit" value="Cancel" onclick="window.location.href='{% url 'home:all' %}';return false;">
+
+    
 
 </form>
     </div>

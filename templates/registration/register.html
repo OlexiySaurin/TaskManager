@@ -4,8 +4,8 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-    <h2 class="text-center m-3">Create Account</h2>
-    <div class="card border-secondary centered p-3 mx-auto m-4 bg-light" style="max-width: 20rem;">
+    <div class="card border-secondary centered p-3 mx-auto m-4 " style="max-width: 20rem; border-radius: 20px;">
+    <h5 class="text-center mb-4 mt-3">Create Account</h5>
 
     <form class="text-center" method="post" action="">
         {% csrf_token %}
@@ -17,69 +17,86 @@
     {% endif %}
         
         <div class="mb-3">
-          <label for="name">Username</label>
             {% if form.username.errors %}
             <div class="text-danger mb-1">
                 {% for error in form.username.errors %}
                     <small>{{ error }}</small><br>
                 {% endfor %}
             </div>
-                <input type="text" class="form-control is-invalid" id="name" name="username" required>
+                <div class="input-group mb-3">
+            <span class="input-group-text" id="username-text"><i class="bi-person-circle"></i></span>
+            <input type="text" class="form-control form-control-sm is-invalid" id="username" name="username" aria-describedby="username-text" placeholder="Username" required>
+        </div>
                 {% else %}
-                <input type="text" class="form-control" id="name" name="username" value="{{ username }}" required>
+                 <div class="input-group mb-3">
+            <span class="input-group-text" id="username-text"><i class="bi-person-circle"></i></span>
+            <input type="text" class="form-control form-control-sm" id="username" name="username" aria-describedby="username-text" placeholder="Username" required>
+        </div>
         {% endif %}
           
         </div>
         <div class="mb-3">
-          <label for="email">Email address</label>
             {% if form.email.errors %}
             <div class="text-danger mb-1">
                 {% for error in form.email.errors %}
                     <small class="bg-danger">{{ error }}</small><br>
                 {% endfor %}
             </div>
-          <input type="email" class="form-control is-invalid" id="email" name="email" required> 
-                
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="email-text"><i class="bi-envelope"></i></span>
+            <input type="email" class="form-control form-control-sm is-invalid" id="email" name="email" aria-describedby="email-text" placeholder="username@example.com" required>
+        </div>
                 {% else %}
-          <input type="email" class="form-control" id="email" name="email" value="{{ email }}" required> 
-                
+                 <div class="input-group mb-3">
+            <span class="input-group-text" id="email-text"><i class="bi-envelope"></i></span>
+            <input type="email" class="form-control form-control-sm" id="email" name="email" aria-describedby="email-text" placeholder="username@example.com" required>
+        </div>   
         {% endif %}
         </div>
         <div class="mb-3">
-            <label for="password1">Password</label>
             {% if form.password1.errors %}
             <div class="text-danger mb-1">
                 {% for error in form.password1.errors %}
                     <small>{{ error }}</small><br>
                 {% endfor %}
             </div>
-          <input type="password" class="form-control is-invalid" id="password1" name="password1" required>
-                
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="password1-text"><i class="bi-lock"></i></span>
+            <input type="password" class="form-control is-invalid form-control-sm" id="password1" name="password1" aria-describedby="password1-text" placeholder="Password" required>
+        </div>
                 {% else %}
-          <input type="password" class="form-control" id="password1" name="password1" value="{{ password1 }}" required>
-                
+                 <div class="input-group mb-3">
+            <span class="input-group-text" id="password1-text"><i class="bi-lock"></i></span>
+            <input type="password" class="form-control form-control-sm" id="password1" name="password1" aria-describedby="password1-text" placeholder="Password" required>
+        </div>   
         {% endif %}
         </div>
         <div class="mb-3">
-            <label for="password2">Confirm password</label>
             {% if form.password2.errors %}
             <div class="text-danger mb-1">
                 {% for error in form.password2.errors %}
                     <small>{{ error }}</small><br>
                 {% endfor %}
             </div>
-          <input type="password" class="form-control is-invalid" id="password2" name="password2" required>
-                
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="password2-text"><i class="bi-lock-fill"></i></span>
+            <input type="password" class="form-control is-invalid form-control-sm" id="password2" name="password2" aria-describedby="password2-text" placeholder="Confirm password" required>
+        </div>
                 {% else %}
-          <input type="password" class="form-control" id="password2" name="password2" value="{{ password2 }}" required>
-                
+                 <div class="input-group mb-3">
+            <span class="input-group-text" id="password2-text"><i class="bi-lock-fill"></i></span>
+            <input type="password" class="form-control form-control-sm" id="password2" name="password2" aria-describedby="password2-text" placeholder="Confirm password" required>
+        </div>   
         {% endif %}
         </div>
-        
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-dark">Sign Up</button>
+            
+        </div>
 
         <input type="hidden" name="next" value="{% url 'login' %}" />
     </form>
-    <footer class="mt-2 text-muted text-center"><small>Already have an account? <a href="{% url 'login' %}">Login</a></small></footer>
+    <footer class="mt-2 text-muted text-center"><small>Already have an account? <a class="text-decoration-none fw-bold" href="{% url 'login' %}">Login</a></small></footer>
     </div>
+    
 {% endblock %}

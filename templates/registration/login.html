@@ -4,39 +4,39 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <h2 class="text-center m-3">Login to Task Manager</h2>
-    <div class="card border-secondary centered p-3 mx-auto m-4 bg-light" style="max-width: 20rem;">
-
+     <div class="card border-secondary centered p-3 mx-auto m-4" style="max-width: 20rem; border-radius: 20px;">
+        <h5 class="text-center mb-4 mt-3">Login to Task Manager</h5>
         {% if form.errors %}
-            <p class="text-danger">Your username and password didn't match. Please try again.</p>
+            <p class="text-danger">Your username and password didn't match.</p>
         {% endif %}
 
     <form class="text-center" method="post" action="{% url 'login' %}">
         {% csrf_token %}
 
-        <div class="mb-3">
-            <label for="username" class="form-label text-muted">Username</label>
-            <input type="text" class="form-control" id="username" name="username" value="{{ username }}" required>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="username-text"><i class="bi-person-circle"></i></span>
+            <input type="text" class="form-control form-control-sm" id="username" name="username" aria-describedby="username-text" placeholder="Username" value="{{ username }}" required>
         </div>
         {% if form.errors %}
-            <div class="mb-3">
-                <label for="password" class="form-label text-muted">Password</label>
-                <input type="password" class="form-control is-invalid" id="password" name="password" required>
+            <div class="input-group mb-3">
                 <div id="password" class="invalid-feedback">
-                    Invalid password.
-                  </div>
+                        Invalid password.
+                      </div>
+                <span class="input-group-text" id="password-text"><i class="bi-lock"></i></span>
+                <input type="password" class="form-control is-invalid form-control-sm" id="password" name="password" aria-describedby="password-text" required>
             </div>
         {% else %}
-            <div class="mb-3">
-                <label for="password" class="form-label text-muted">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+             <div class="input-group mb-3">
+                <span class="input-group-text" id="password-text"><i class="bi-lock"></i></span>
+                <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Password" aria-describedby="password-text" required>
             </div>
         {% endif %}
-        
-        <button type="submit" class="btn btn-primary">Login</button>
-
+        <div class="d-grid">
+        <button type="submit" class="btn btn-dark">Login</button>
+        </div>
         <input type="hidden" name="next" value="{% url 'home:all' %}" />
     </form>
-    <footer class="mt-2 text-muted"><small>Don't have an account? <a href="{% url 'home:register' %}">Sign Up</a></small></footer>
+    <footer class="mt-2 text-muted text-center"><small>Don't have an account? <a class="text-decoration-none fw-bold" href="{% url 'home:register' %}">Sign Up</a></small></footer>
     </div>
+   
 {% endblock %}

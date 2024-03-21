@@ -1,6 +1,5 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-
+from django.core.paginator import Paginator
 from .forms import TaskForm, CreateUserForm
 from .models import Task
 from .owner import OwnerListView, OwnerDetailView, OwnerUpdateView, OwnerDeleteView, OwnerCreateView
@@ -27,8 +26,18 @@ class TaskListView(OwnerListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # Retrieve all tasks
+        tasks = Task.objects.filter(owner=self.request.user).order_by('-updated_at')
+
+        # Paginate tasks
+        paginator = Paginator(tasks, 3)  # Show 3 tasks per page
+
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         form = TaskForm()
         context['create_form'] = form
+        context['page_obj'] = page_obj
         return context
 
 
@@ -58,8 +67,18 @@ class TaskUpdateView(OwnerUpdateView):
     """Overriding get_context_data to change name of updating form to update_form"""
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        tasks = Task.objects.filter(owner=self.request.user).order_by('-updated_at')
+
+        # Paginate tasks
+        paginator = Paginator(tasks, 3)  # Show 3 tasks per page
+
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        form = TaskForm()
+        context['create_form'] = form
+        context['page_obj'] = page_obj
         context['update_form'] = context['form']
-        context['task_list'] = Task.objects.filter(owner=self.request.user)
         del context['form']
         return context
 

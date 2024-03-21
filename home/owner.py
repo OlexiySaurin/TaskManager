@@ -10,7 +10,7 @@ class OwnerListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """ Limit a User to only watching their own data. """
         qs = super(OwnerListView, self).get_queryset()
-        return qs.filter(owner=self.request.user)
+        return qs.filter(owner=self.request.user).order_by("-updated_at")
 
 
 class OwnerDetailView(LoginRequiredMixin, DetailView):
@@ -21,7 +21,7 @@ class OwnerDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         """ Limit a User to only watching their own data. """
         qs = super(OwnerDetailView, self).get_queryset()
-        return qs.filter(owner=self.request.user)
+        return qs.filter(owner=self.request.user).order_by("-updated_at")
 
 
 class OwnerCreateView(LoginRequiredMixin, CreateView):
@@ -47,7 +47,7 @@ class OwnerUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         """ Limit a User to only modifying their own data. """
         qs = super(OwnerUpdateView, self).get_queryset()
-        return qs.filter(owner=self.request.user)
+        return qs.filter(owner=self.request.user).order_by("-updated_at")
 
 
 class OwnerDeleteView(LoginRequiredMixin, DeleteView):
@@ -58,4 +58,4 @@ class OwnerDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         qs = super(OwnerDeleteView, self).get_queryset()
-        return qs.filter(owner=self.request.user)
+        return qs.filter(owner=self.request.user).order_by("-updated_at")
